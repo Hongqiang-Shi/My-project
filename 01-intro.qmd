@@ -1,0 +1,80 @@
+# Introduction {#sec-intro}
+
+This is where you introduce the main ideas of your thesis and provide an
+overview of the context and background.
+
+An honours thesis typically contains several chapters. This template
+provides two example chapters — an introduction and a literature review — but
+you should add or rename chapters to suit your research.
+
+## Research question
+
+State your research question clearly here.
+
+## Thesis structure
+
+Provide a brief overview of each chapter:
+
+- **Chapter 2** reviews the relevant literature.
+- **Chapter 3** describes the data and methodology.
+- **Chapter 4** presents the results.
+- **Chapter 5** concludes with a discussion and directions for future research.
+
+## Using Quarto
+
+The big advantage of Quarto is that it lets you include R or Python code
+directly in your thesis, ensuring everything is reproducible and there are no
+copy-paste errors.
+
+For details on using Quarto, see <https://quarto.org>.
+
+### Figures
+
+```{r}
+#| label: fig-example
+#| fig-cap: "A simple example figure."
+#| fig-width: 6
+#| fig-height: 4
+library(ggplot2)
+mtcars |>
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point() +
+  labs(x = "Weight (wt)", y = "Miles per gallon (mpg)")
+```
+
+@fig-example shows that heavier cars are less fuel-efficient, although EVs are very heavy and use no petrol at all.
+
+### Tables
+
+```{r}
+#| label: tbl-example
+#| tbl-cap: "A simple example table."
+knitr::kable(
+  data.frame(
+    Variable = c("x", "y", "z"),
+    Mean     = c(1.23, 4.56, 7.89),
+    SD       = c(0.12, 0.45, 0.78)
+  )
+)
+```
+
+@tbl-example shows a simple summary table.
+
+### Mathematics
+
+Equations are typeset with full LaTeX-style support. For example, the normal
+distribution density function is
+$$
+  f(x) = \frac{1}{\sigma\sqrt{2\pi}}
+         \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right).
+$$ {#eq-normal}
+
+### Cross-references
+
+You can cross-reference sections (@sec-intro), figures (@fig-example),
+tables (@tbl-example), and equations (@eq-normal).
+
+### Citations
+
+Citations use the `@key` syntax. For example, @Brown59 and @Winters60 are
+references from the bibliography.

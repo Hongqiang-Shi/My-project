@@ -1,0 +1,17 @@
+# Literature Review {#sec-litreview}
+
+Provide a critical review of the relevant literature here.
+
+Organise the review thematically rather than chronologically. Identify the key debates, agreements, and gaps in the existing work, and explain how your thesis addresses one of those gaps.
+
+## Topic area one
+
+Summarise and critique the literature on the first major theme.
+
+## Topic area two
+
+Summarise and critique the literature on the second major theme. @ma2025 will discuss this in my future paper.
+
+## Gaps in the literature
+
+Conclude the review by articulating the specific gap your thesis addresses, linking it directly to your research question in @sec-intro.

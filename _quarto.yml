@@ -1,0 +1,23 @@
+project:
+  type: book
+
+book:
+  title: "Forecasting selection Bias in Difference-in-Differences: Simulation Evidence and Empirical Application"
+  author: "Hongqiang Shi"
+  chapters:
+    - index.qmd
+    - "01-intro.qmd"
+    - "02-litreview.qmd"
+
+bibliography: thesisrefs.bib
+csl: american-statistical-association.csl
+degreetype: Master of Applied Econometrics
+submitted: 2026
+affiliation: Department of Econometrics & Business Statistics
+supervisor: "Prof. Klause Ackermann"
+
+format:
+  monashhonours-typst: default
+
+execute:
+  freeze: auto
