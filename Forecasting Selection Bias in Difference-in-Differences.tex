@@ -1,0 +1,190 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\title{Forecasting Selection Bias in Difference-in-Differences: A Simulation Study and Empirical Application}
+\author{Hongqiang Shi}
+\date{May 4, 2026}
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\subsection{Motivation}
+
+Difference-in-Differences (DiD) is one of the most widely used empirical strategies for causal effect in non-experimental settings. In the canonical difference-in-differences model, there is a treated group that receives a treatment of interest and an untreated group that does not receive the treatment. The credibility of DiD estimates relies on the parallel trends assumption, which requires treated and untreated groups to have evolved similarly in the absence of treatment. However, this assumption is often difficult to verify in practice, especially when treatment is assigned non-randomly. Existing literature often focus on detecting violations or restricting the sample to satisfy assumptions. While valuable, these approaches do not always provide a direct correction to DiD estimator itself. A method that can adjust rather than simply discard DiD designs under violation would be highly valuable.
+
+ 
+\section{Literature Review}
+
+\subsection{Validation of Parallel Trends}
+
+Given the importance of the parallel trends assumption, a substantial literature has focused on assessing its plausibility in empirical applications. A common approach is to examine pre-treatment trends using event-study designs, where coefficients on leads or anticipatory effects of treatment. If these pre-treatment effects are insignificant, the DiD design is often considered credible and the parallel trend was valid in the pre-treatment period. Early contributions such as \cite{noauthor_outsourcing_nodate} popularized this approach, and graphical inspection of pre-treatment trends has since become convention.
+
+However, a growing literature has questioned the validity of pre-treatment test. \cite{roth_pretest_2022} demonstrates that pre-test for parallel trends often suffer from low statistical power. More importantly, the conditioning subsequent estimation on pre-trend test can introduce additional bias and under-coverage of confidence intervals. Moreover, even if pre-test pass and parallel trends hold, this does not imply that the post-treatment parallel trends assumption is satisfied as well. The case \cite{kahn-lang_promise_2020} of adolescent height growth demonstrates that even with perfectly parallel pre-trends, biological or other factors would cause natural divergence in post periods.
+
+\subsection{Robustness and Alternative Approaches}
+
+Existing literature developed a range of methods to improve the robustness of DiD estimation in response to concerns about the credibility of the parallel trends. One approach \cite{strezhnev_group-specific_2024} is to allow for more flexible trend structures, such as incorporating group-specific linear trends. It helps to relax the parallel trend assumption by partially address differences in underlying trajectories.
+
+Another important strand of the literature focuses on sensitivity analysis. For instance, \cite{rambachan_honest_nodate} proposes methods that relax the parallel trends assumption by allowing for bounded deviations and constructing confidence intervals that remain valid under such deviations. These approaches provide valuable tools for assessing the robustness of DiD estimator.
+
+\subsection{Counterfactual Prediction and Forecasting Approaches}
+
+An alternative approach to addressing violations of parallel trends is to directly model or predict the counterfactual outcomes of treated group. The synthetic control method developed by \cite{abadie_synthetic_2010}, which constructs a weighted control group by approximating the treated unit’s pre-treatment trajectory and uses this to infer post-treatment counterfactual outcomes.
+
+More broadly, recent work \cite{noauthor_matrix_nodate} has explored the use of matrix completion methods and machine learning to estimate counterfactual outcomes in panel data. These approaches leverage patterns in the data to improve prediction accuracy and reduce reliance on strict identifying assumptions.
+
+While existing counterfactual prediction methods focus primarily on constructing untreated outcome paths for treatment effect estimation, relatively little attention has been paid to using these predictions to explicitly estimate and remove selection bias from conventional DiD estimators.
+
+\section{Contribution}
+
+\begin{itemize}
+    \item This project evaluates a forecasting-based bias correction approach for Difference-in-Differences estimation when the parallel trends assumption is violated.
+    \item The project compares alternative forecasting methods (such as linear trends, synthetic control, and machine learning approaches) in a causal inference setting.
+    \item The empirical application provides practical guidance for researchers facing questionable parallel trends in real-world policy evaluation.
+\end{itemize}
+ 
+\section{Methodology}
+
+\subsection{Data}
+
+\subsubsection{Simulation Data}
+
+To evaluate the performance of the proposed forecasting-based bias correction estimator under controlled conditions, this project will first conduct a simulation study using artificially generated panel datasets. Simulation will be implemented in Python and Computational implementation will rely on packages such as Numpy. The simulation framework will generate balanced panel data consisting of N observational units over T time periods, where treatment is introduced after a pre-treatment period. The baseline design will initially consider moderate sample sizes, with sensitivity analyses conducted under alternative panel dimensions.
+
+To generate violations of the parallel trends assumption, treatment assignment will be allowed to depend on the underlying trend parameters, so that units with systematically different pre-treatment trajectories are more likely to receive treatment. This creates selection bias similar to that encountered in applied settings.
+
+The simulation will explore various degrees of selection bias by manipulating these scenarios and so on:
+
+\begin{itemize}
+    \item settings with linear deviations from parallel trends;
+    \item settings with nonlinear trend heterogeneity or staggered treatment:
+    \item settings with varying levels of stochastic noise.
+\end{itemize}
+
+\subsubsection{Empirical Data}
+
+In addition to simulation analysis, the project will evaluate the proposed methodology using real-world panel data from the empirical application studied in \cite{mancha_when_2025}’s recent work. The dataset includes both state-level panel data and municipality-level panel data from Ceará, Brazil, which were originally used to estimate causal effects using conventional two-way fixed effects and Difference-in-Differences specifications. The empirical data and replication materials are publicly available through the original author’s GitHub repository. 
+
+\subsection{Standard DiD setup}
+
+This project begins with the conventional Difference-in-Differences (DiD) framework estimated using a two-way fixed effects (TWFE) specification. Let $Y_{it}$ denote the observed outcome for unit i=1,...,N at time t=1,...,T, and let $D_{it}$ indicate treatment status. The benchmark model is given by:
+ % Requires: \usepackage{amsmath}
+\begin{equation}
+    Y_{it} = \alpha_i + \lambda_t + \tau D_{it} + \varepsilon_{it}
+    \label{eq:placeholder_label}
+\end{equation}
+where $α_{it}$ captures unit-specific fixed effects, $λ_{t}$ represents the time effects, and τ\textbackslash{}tauτ denotes the average treatment effect on the treated. 
+
+Identification of τ\textbackslash{}tauτ relies on the parallel trends assumption: 
+% Requires: \usepackage{amsmath}
+\begin{equation}
+    E[\Delta Y_{it}(0)\mid D_i = 1] = E[\Delta Y_{it}(0)\mid D_i = 0]
+    \label{eq:placeholder_label}
+\end{equation}
+where \( \Delta Y_{it}(0)\) denotes the difference between the potential outcome for unit i at time t if it does not receive treatment and the outcome in baseline.
+
+\subsection{Selection Bias under Violations of Parallel Trends}
+
+When the parallel trends assumption fails, the conventional DiD estimator no longer identifies the treatment effect unbiasedly, leading to time-varying bias in the DiD estimate. We define the time-varying selection bias at time t as:
+% Requires: \usepackage{amsmath}
+\begin{equation}
+   SB(t) = E[\Delta Y_{it}(0)\mid D_i = 1] - E[\Delta Y_{it}(0)\mid D_i = 0]
+    \label{eq:placeholder_label}
+\end{equation}
+If we spread it out to:
+
+% Requires: \usepackage{amsmath}
+\begin{equation}
+    SB(t) = \left( E[Y_t(0) \mid D = 1] - E[Y_{t}(0) \mid D = 0] \right) - \left( E [Y_{T_0}(0) \mid D = 1] - E[Y_{T_0}(0) \mid D = 0] \right).
+    \label{eq:placeholder_label}
+\end{equation}
+We cannot observe \(Y_t(0)\) for D = 1 in the post-treatment period (\(t > T_0 \))because those units actually received treatment.
+
+\subsection{Forecasting-Based Bias Correction}
+
+The central idea of this project is to forecast the untreated counterfactual outcome of treated units using pre-treatment information. We will first propose a unit-level forecasting model and then aggregate forecasts for the treated group by:
+% Requires: \usepackage{amsmath}
+\begin{equation}
+    \label{eq:placeholder_label}
+    \widehat{Y}_{i,t}(0) = f(x_{i,t}, i, t; \hat{\beta}), \qquad 
+    E[\widehat{Y}_{t}(0) \mid D = 1] = \frac{1}{N_1} \sum_{i : D_i = 1} \widehat{Y}_{i,t}(0),
+\end{equation}
+where \(f (.)\) is some estimated methods using pre-treatment data, such as:
+\begin{itemize}
+    \item \textbf{linear trend model}:  % Requires: \usepackage{amsmath}
+\end{itemize}
+\begin{equation}
+    Y_{it} = \alpha_i + \gamma_t + X_{it}' β + \varepsilon_{it}
+    \label{eq:placeholder_label}
+\end{equation}
+where \(\gamma\) represents a deterministic time trend, and \(X_{it}'\) denotes observable covariates. 
+
+Estimated pre-treatment trends are then extended to post-treatment periods to generate forecasting outcomes for treated units. 
+
+\begin{itemize}
+    \item \textbf{Synthetic Control}: A weighted combination of control units is constructed using pre-treatment outcomes: % Requires: \usepackage{amsmath}
+\end{itemize}
+\begin{equation}
+   \hat{Y_{it}}  = \sum^{J}_{j=1}\omega_{j}Y_{jt}
+    \label{eq:placeholder_label}
+\end{equation}
+where weights \(\omega_{j}\) are chosen to minimize discrepancies between treated and synthetic control units during the pre-treatment period.
+
+\begin{itemize}
+    \item \textbf{Machine Learning}: Random Forest, Gradient Boosting, Neural Networks trained on pre-treatment observations.
+\end{itemize}
+
+Once we obtain forecasts for the untreated outcomes, we can estimate the forecasted selection bias:
+% Requires: \usepackage{amsmath}
+\begin{equation}
+    \widehat{SB(t)} = \left( \widehat{Y_t(0) \mid D = 1} - E[Y_{t}(0) \mid D = 0] \right) - \left( E [Y_{T_0}(0) \mid D = 1] - E[Y_{T_0}(0) \mid D = 0] \right).
+    \label{eq:placeholder_label}
+\end{equation}
+
+ And then, we can correct the DiD estimate:
+ % Requires: \usepackage{amsmath}
+\begin{equation}
+    \widehat{\tau}^{\text{Adjusted}}(t) = \widehat{\tau}^{\text{DiD}}(t) - \widehat{SB}(t).
+    \label{eq:placeholder_label}
+\end{equation}
+
+\subsection{Evaluation of the adjusted DiD}
+
+For each violated parallel trend assumption scenario, the proposed estimator will be compared against conventional DiD estimators and the adjusted DiD specifications. Estimator performance will be evaluated using:
+\begin{itemize}
+    \item bias and variance
+    \item confidence interval coverage
+    \item root mean squared error (RMSE) 
+\end{itemize}
+
+\subsection{Empirical Implementation}
+
+To assess practical relevance, the proposed methodology will be applied to the empirical dataset used in André’s original study. As preliminary preparation, the baseline state-level TWFE specification and the Ceará-level DiD analysis have already been successfully replicated in R.
+
+\section{Timeline}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{3cm} p{9cm}}
+    \toprule
+    June - July & Construction of simulation framework and baseline data-generating processes. Then implementation of forecasting models and bias-correction estimators \\
+    \midrule
+    August - September & Empirical application using André’s replication data \\
+    \midrule
+    October - December & Interpretation of results and thesis finishing \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\bibliographystyle{plainnat}
+\bibliography{references.bib/references}
+
+\end{document}
